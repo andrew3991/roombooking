@@ -1,0 +1,49 @@
+<!-- vgl. https://www.youtube.com/watch?v=HshbjK1vDtY -->
+<!-- vgl. https://github.com/codingforentrepreneurs/eCommerce/tree/master/src -->
+
+{% extends "../base.html" %}
+
+{% block content %}
+    <div class='text-center'>
+        <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
+    </div>
+
+    <div class='row'>
+        <div class='col'>
+            <h4>User</h4>
+            <p>{{ user.email }}</p>
+            <br>
+
+            <h6>Status</h6>
+            {% if user.is_admin %}
+                <p>Account: Admin</p>
+            {% elif user.is_advanceduser %}
+                <p>Account: Advanced User</p>
+            {% elif user.is_simpleuser %}
+                <p>Account: Simple User</p>
+                <!-- {{ user.is_admin }} {{ user.is_simpleuser }} {{ user.is_advanceduser }} -->
+            {% endif %}
+            <br>
+
+            <h6>Company</h6>
+            <p>Name: {{ user.company.name }}</p>
+            <p>Domain: {{ user.company.email_domain }}</p>
+        </div>
+    </div>
+
+    <div>
+        {% if user.is_admin %}
+            <!-- https://stackoverflow.com/questions/42628883/object-id-in-django-url/42628998 -->
+            <a href="{% url 'updatecompany' user.company.pk %}">Update Company</a>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if user.is_admin %}
+            <a href="{% url 'buildings:addbuilding' %}">Add a new building</a></br>
+            <a href="{% url 'buildings:addroom' %}">Add a new room</a></br>
+            <a href="{% url 'buildings:addinterval' %}">Add a new time interval</a></br>
+            <a href="{% url 'buildings:addfeature' %}">Add a new room feature</a></br>
+        {% endif %}
+    </div>
+{% endblock %}

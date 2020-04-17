@@ -1,0 +1,22 @@
+{% extends "../base.html" %}
+{{ form.media }}
+{% block content %}
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4">
+                        Enter the date (DD.MM.YYYY)
+                    </h1>
+                    <form action="{% url 'buildings:building-search-date' %}" method="post">
+                        {% csrf_token %}
+                        {{ form.date }}
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

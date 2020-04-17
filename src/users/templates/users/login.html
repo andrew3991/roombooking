@@ -1,0 +1,12 @@
+<!-- vgl. https://www.youtube.com/watch?v=HshbjK1vDtY -->
+<!-- vgl. https://github.com/codingforentrepreneurs/eCommerce/tree/master/src -->
+
+{% extends "../base.html" %}
+
+{% block content %}
+  <h1>Login</h1>
+  <form method='POST'> {% csrf_token %}
+    {{ form.as_p }}
+    <button type='submit' class='btn btn-default'>Submit</button>
+  </form>
+{% endblock %}

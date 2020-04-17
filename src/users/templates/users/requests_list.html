@@ -1,0 +1,24 @@
+{% extends "../base.html" %}
+
+{% block content %}
+  <h1>Requests for</h1>
+  <p>{{ user }}</p>
+
+  <ul>
+    {% for request in requests %}
+      {% if not request.in_progress %}
+        <p>To: {{ request.receiver.email }}</p>
+        <p>From: {{ request.sender.email }}</p>
+        <p>Message: {{ request.message }}</p>
+        <p>In progress: {{ request.in_progress }}</p>
+
+        <!-- Upgrade account of simple user who sent the request -->
+        <!-- if manual check for upgrading was successful -->
+        <!-- https://stackoverflow.com/questions/42628883/object-id-in-django-url/42628998 -->
+        <a href="{% url 'account-upgrade' request.sender.pk %}">Upgrade</a>
+        <br>
+        <br>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "../base.html" %}
+
+
+{% block content %}
+
+<form action='.' method='POST'>{% csrf_token %}
+  <div class="form-group">
+    <label for="deleteBooking">Do you want to delete the booking "{{ object.id }}"?</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Yes</button>
+  <a class="btn btn-primary" role="button"  href='../../'>Cancel</a>
+</form>
+
+{% endblock %}

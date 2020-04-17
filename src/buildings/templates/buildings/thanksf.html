@@ -1,0 +1,20 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4">
+                        The room feature was successfully added
+                    </h1>
+                </div>
+                <div>
+                    <a href="{% url 'buildings:addfeature' %}">Add another one?</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

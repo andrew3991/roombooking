@@ -1,0 +1,57 @@
+<!-- vgl. https://www.youtube.com/watch?v=HshbjK1vDtY -->
+<!-- vgl. https://github.com/codingforentrepreneurs/eCommerce/tree/master/src -->
+
+{% url 'login' as login_url %}
+{% url 'logout' as logout_url %}
+{% url 'register' as register_url %}
+{% url 'profile' as profile_url %}
+{% url 'bookings:booking-list' as booking_url %}
+{% url 'buildings:building-search-date' as building_url %}
+{% url 'request-upgrade' as upgrade_url %}
+{% url 'requests' as requests_url %}
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% if request.user.is_authenticated %}
+        <!-- Logout -->
+        <li class="nav-item">
+          <a class="nav-link" href="{{ logout_url }}">Logout</a>
+        </li>
+        <!-- Profile page -->
+        <li class="nav-item {% if request.path == profile_url %}active{% endif %}">
+          <a class="nav-link" href="{{ profile_url }}">Profile</a>
+        </li>
+        <li class="nav-item {% if request.path == booking_url %}active{% endif %}">
+          <a class="nav-link" href="{{ booking_url }}">{% if request.user.is_admin %} All Bookings {% else %} My Bookings {% endif %}</a>
+        </li>
+        <li class="nav-item {% if request.path == building_url %}active{% endif %}">
+            <a class="nav-link" href="{{ building_url }}">Rooms</a>
+        </li>
+        {% if not request.user.is_advanceduser and not request.user.is_admin %}
+          <!-- Link for sending upgrade request to Admin -->
+          <li class="nav-item {% if request.path == upgrade_url %}active{% endif %}">
+            <a class="nav-link" href="{{ upgrade_url }}">Upgrade account</a>
+          </li>
+        {% endif %}
+        {% if request.user.is_admin %}
+          <!-- Link for accessing requests to upgrade a simple user account -->
+          <li class="nav-item">
+            <!-- https://stackoverflow.com/questions/42628883/object-id-in-django-url/42628998 -->
+            <a class="nav-link" href="{% url 'requests' request.user.pk %}">Requests</a>
+          </li>
+        {% endif %}
+      {% else %}
+        <!-- Register -->
+        <li class="nav-item {% if request.path == register_url %}active{% endif %}">
+          <a class="nav-link" href="{{ register_url }}">Register</a>
+        </li>
+        <!-- Login -->
+        <li class="nav-item {% if request.path == login_url %}active{% endif %}">
+          <a class="nav-link" href="{{ login_url }}">Login</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

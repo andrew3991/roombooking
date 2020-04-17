@@ -1,0 +1,12 @@
+<!-- https://github.com/CoreyMSchafer/code_snippets/blob/master/Django_Blog/12-Password-Reset/django_project/users/templates/users/logout.html -->
+
+{% extends "../base.html" %}
+
+{% block content %}
+  <h1>You're logged out!</h1>
+  <div class="border-top pt-3">
+    <small class="text-muted">
+        <a href="{% url 'login' %}">Log In Again</a>
+    </small>
+  </div>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "../base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+    {{ date }}
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4">
+                        Room Searching
+                    </h1>
+
+
+                    <form action="" method="get">
+                        {% csrf_token %}
+                        <div class="well" style="margin-bottom: 50px">
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-3">
+                                    {{ filter.form.room_number.label_tag }}
+                                    {% render_field filter.form.room_number class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-4 col-md-3">
+                                    {{ filter.form.description.label_tag }}
+                                    {% render_field filter.form.description class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-4 col-md-3">
+                                    {{ filter.form.floor.label_tag }}
+                                    {% render_field filter.form.floor class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-4 col-md-3">
+                                    {{ filter.form.capacity.label_tag }}
+                                    {% render_field filter.form.capacity class="form-control" %}
+                                </div>
+                                <div class="form-group col-sm-8 col-md-6">
+                                    {{ filter.form.features.label_tag }}
+                                    <div>
+                                        {% for choice in filter.form.features %}
+                                            <label class="checkbox-inline">
+                                                {{ choice.tag }} {{ choice.choice_label }}
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-search"></span> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4 text-center">
+                        Room List</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="container ">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    {% for building in buildings %}
+                        <div class="container">
+                            <h3><span class="toggler toggle-enabled">{{ building.title }}</span></h3>
+                            {% for floor in building.floor_count %}
+                                <div class="wrapper togglethis">
+                                    <div class="container">
+                                        <h4><span class="toggler toggle-enabled">Floor {{ floor }}</span></h4>
+                                        {% for room in filter.qs %}
+                                            {% if building.id == room.building_id and floor == room.floor %}
+                                                <div class="container">
+
+                                                    <h5><span
+                                                            class="toggler toggle-enabled">Room {{ room.room_number }}</span>
+                                                    {% if user.is_advanceduser or user.is_admin %}
+                                                         <a class="btn btn-primary"
+                                                           href="{% url 'buildings:editroom' room.id %}"
+                                                           role="button">Edit</a>
+                                                    {% else %}
+                                                        <p></p>
+                                                    {% endif %}
+                                                    </h5>
+                                                    <p><span
+                                                            class="toggler toggle-enabled">Description: {{ room.description }}</span>
+                                                    </p>
+{#                                                {% if room.features %}#}
+{#                                                    {% for f in room.features %}#}
+{#                                                        <p><span class="toggler toggle-enabled">{{ f }}</span></p>#}
+{#                                                    {% endfor %}#}
+{#                                                {% endif %}#}
+
+
+
+
+
+                                                    {% for i in intervals %}
+                                                        {% if room.id == i.room_id %}
+                                                            {% if user.is_admin %}
+                                                                {% if i.status == 'Booked' %}
+                                                                    <div class="wrapper togglethis">
+                                                                        <p>{{ i }} - is booked!
+
+                                                                        </p>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="wrapper togglethis">
+                                                                        <p>{{ i }}
+
+                                                                            <a href="{% url 'bookings:room-book' i.id %} "
+                                                                               class="btn btn-primary" role="button">Book</a>
+                                                                        </p>
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {% if i.status == 'Booked' %}
+                                                                    <div class="wrapper togglethis">
+                                                                        <p>{{ i }} - is booked!
+                                                                            <a href="" class="btn btn-primary"
+                                                                               role="button">Book
+                                                                                anyway</a>
+                                                                        </p>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="wrapper togglethis">
+                                                                        <p>{{ i }}
+                                                                            <a href="{% url 'bookings:room-book' i.id %} "
+                                                                               class="btn btn-primary" role="button">Book</a>
+                                                                        </p>
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

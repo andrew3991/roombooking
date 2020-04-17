@@ -1,0 +1,35 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4">
+                        Edit room
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="showcase">
+        <div class="container text">
+            <div class="p-3">
+                <div class="overlay p-3">
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="Edit">
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

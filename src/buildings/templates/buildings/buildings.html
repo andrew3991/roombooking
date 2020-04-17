@@ -1,0 +1,163 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4">
+                        Room Searching
+                    </h1>
+                    <div class="search">
+                        <form action="{% url 'buildings:search' %}">
+                            <!-- Form Row 1 -->
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Keywords</label>
+                                    <input type="text" name="keywords" class="form-control"
+                                           placeholder="Keyword (tables, view, etc)">
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Room Number</label>
+                                    <input type="text" name="room_number" class="form-control"
+                                           placeholder="Room Number">
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Building</label>
+                                    <select name="building" class="form-control">
+                                        <option selected="true" disabled="disabled">Building (All)</option>
+                                        {% for key,value in building_choices.items %}
+                                            <option value="{{ key }}" class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Form Row 2 -->
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Beamer</label>
+                                    <select name="beamer" class="form-control">
+                                        <option selected="true" disabled="disabled">Beamer</option>
+                                        {% for key,value in beamer_choices.items %}
+                                            <option value="{{ key }}" class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Board</label>
+                                    <select name="board" class="form-control">
+                                        <option selected="true" disabled="disabled">Board</option>
+                                        {% for key,value in board_choices.items %}
+                                            <option value="{{ key }}" class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Time</label>
+                                    <select name="time" class="form-control">
+                                        <option selected="true" disabled="disabled">Time (Any)</option>
+                                        {% for key,value in time_choices.items %}
+                                            <option value="{{ key }}" class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary btn-block mt-4" type="submit">Submit form</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="showcase">
+        <div class="container text">
+            <div class="p-3">
+                <div class="overlay p-3">
+
+
+                    <h1 class="display-4 mb-4 text-center">
+                        Room List</h1>
+
+                    {% for building in building_list %}
+                        <p>{{ building.title }}</p>
+                        <p>{{ building.address }}</p>
+                        {% for floor in building.floor_count %}
+                            {#                            {% if room %}#}
+                            <p>{{ floor }}</p>
+                            {% for room in room_list %}
+                                {% if building.id == room.building_id and floor == room.floor %}
+                                    <p>{{ room.room_number }}
+                                        <a class="btn btn-primary" href="" role="button">Book</a>
+                                    </p>
+                                    <p>{{ room.description }}</p>
+                                {% endif %}
+                            {% endfor %}
+                            {#                            {% endif %}#}
+                        {% endfor %}
+                    {% endfor %}
+
+
+
+
+
+
+
+                    <div class="accordion" id="buildinglist">
+                        <div class="card">
+                            {% for building in building_list %}
+                                <div class="card-header" id="headingOne">
+
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseOne"
+                                                aria-expanded="true" aria-controls="collapseOne">
+                                            {{ building.title }}
+                                        </button>
+                                    </h2>
+
+                                </div>
+                                {#                {% endfor %}#}
+                                {##}
+                                {#                {% for building in building_list %}#}
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                     data-parent="#buildinglist">
+                                    <div class="card-body">
+                                        {{ building.address }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    {#    <div class="accordion" id="accordionExample">#}
+    {#        {% for building in building_list %}#}
+    {#            {% for floor in building_list.floor_count %}#}
+    {#                {{ floor }}#}
+    {#                {% for room in room_list %}#}
+    {##}
+    {#                    {% if building.id == room.building_id and floor == room.floor %}#}
+    {#                        <p>{{ room.description }}#}
+    {#                            <a class="btn btn-primary" href="" role="button">Edit</a>#}
+    {#                            <a class="btn btn-primary" href="" role="button">Book</a>#}
+    {#                        </p>#}
+    {#                    {% endif %}#}
+    {#                {% endfor %}#}
+    {#            {% endfor %}#}
+    {#        {% endfor %}#}
+    {#    </div>#}
+
+{% endblock %}

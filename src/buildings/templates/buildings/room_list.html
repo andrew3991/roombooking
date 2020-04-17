@@ -1,0 +1,10 @@
+{% load staticfiles %}
+
+{% block content %}
+    <h1>Rooms</h1>
+
+    {% for room in rooms %}
+      <p>{{ room.description }}</p>
+      <p>{{ room.size }}</p>
+  {% endfor %}
+{% endblock %}

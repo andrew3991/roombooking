@@ -1,0 +1,41 @@
+# vgl. https://www.youtube.com/watch?v=HshbjK1vDtY
+# vgl. https://github.com/codingforentrepreneurs/eCommerce/tree/master/src
+
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .forms import UserAdminCreationForm, UserAdminChangeForm
+from .models import UpgradeRequest
+
+
+User = get_user_model()
+
+
+class UserAdmin(BaseUserAdmin):
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
+
+    list_display = ('email', 'admin')
+    list_filter = ('admin', 'staff', 'simpleuser', 'advanceduser', 'active')
+    fieldsets = (
+        (None, {'fields': ('email', 'password',)}),
+        ('Full name', {'fields': ('first_name', 'last_name',)}),
+        ('Company', {'fields': ('company',)}),
+        ('Permissions', {'fields': ('admin', 'staff', 'simpleuser', 'advanceduser', 'active', )}),
+    )
+    add_fieldsets = (
+        (None, {'classes': ('wide',), 'fields': ('email', 'password1', 'password2')}),
+    )
+    search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('email',)
+    filter_horizontal = ()
+
+
+admin.site.unregister(Group)
+admin.site.register(User, UserAdmin)
+
+
+@admin.register(UpgradeRequest)
+class UpgradeRequestAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'receiver', 'message', 'in_progress', 'pk')

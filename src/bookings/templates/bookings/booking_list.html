@@ -1,0 +1,39 @@
+{% extends "../base.html" %}
+
+{% block content %}
+    <table class="table">
+    <thead class="thead-light">
+    <tr>
+        <th>Id</th>
+        <th>Date</th>
+        <th>User</th>
+        <th>Room</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    {% for booking in booking_list %}
+    <tbody>
+    <tr>
+        <td>{{ booking.id }}</td>
+        <td>{{ booking.reservation_date }}</td>
+        <td>{{ booking.user }}</td>
+        <td>{{ booking.room }}</td>
+        <td>{{ booking.status }}</td>
+        <td> <a class="btn btn-primary" href="{% url 'bookings:booking-delete' booking.id %}" role="button">Delete</a></td>
+        {% if request.user.is_admin %}
+            <td><a class="btn btn-primary" href="{% url 'bookings:booking-update' booking.id %}" role="button">Edit</a></td>
+        {% else %}
+            <td></td>
+        {% endif %}
+
+    </tr>
+    </tbody>
+    {% endfor %}
+    </table>
+
+
+
+
+{% endblock %}

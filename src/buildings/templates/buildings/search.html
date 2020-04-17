@@ -1,0 +1,193 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4">
+                        Room Searching
+                    </h1>
+                    <div class="search">
+                        <form action="{% url 'buildings:search' %}">
+
+
+                            <!-- Form Row 1 -->
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Keywords</label>
+                                    <input type="text" name="keywords" class="form-control"
+                                           placeholder="Keyword (tables, view, etc)" value="{{ values.keywords }}">
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Room Number</label>
+                                    <input type="text" name="room_number" class="form-control"
+                                           placeholder="Room Number" value="{{ values.room_number }}">
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Building</label>
+                                    <select name="building" class="form-control">
+                                        <option selected="true" disabled="disabled">Building (All)</option>
+                                        {% for value in building_list_query %}
+                                            <option class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Form Row 2 -->
+
+
+                            <div class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Feature</label>
+{#                                    <fieldset name="feature">#}
+{#                                        {% for value in feature_list_query %}#}
+{#                                            <input type="checkbox" name="{{ value }}" value="{{ value }}"/> {{ value }}#}
+{#                                            <br>#}
+{#                                        {% endfor %}#}
+{#                                    </fieldset>#}
+
+
+                                    <select multiple name="feature" class="form-control">
+                                        <option selected="true" disabled="disabled">Features</option>
+                                        {% for value in feature_list_query %}
+                                            <option class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+
+
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Board</label>
+                                    <select name="board" class="form-control">
+                                        <option selected="true" disabled="disabled">Board</option>
+                                        {% for key,value in board_choices.items %}
+                                            <option value="{{ key }}" class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="sr-only">Time</label>
+                                    <select name="time" class="form-control">
+                                        <option selected="true" disabled="disabled">Time (Any)</option>
+                                        {% for value in time_list_query %}
+                                            <option class="value">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <button class="btn btn-secondary btn-block mt-4" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+                    <h1 class="display-4 mb-4 text-center">
+                        Room List</h1>
+                </div>
+            </div>
+        </div>
+        <div class="container ">
+            <div class="home-search p-3">
+                <div class="overlay p-3">
+
+                    {% for building in building_list %}
+                        <p>{{ building.title }}</p>
+                        <p>{{ building.address }}</p>
+                        {% for floor in building.floor_count %}
+                            <p>{{ floor }}</p>
+                            {% for room in room_list %}
+                                {% if building.id == room.building_id and floor == room.floor %}
+                                    <p>{{ room.room_number }}
+                                        <a class="btn btn-primary" href="" role="button">Edit</a>
+                                        <a class="btn btn-primary" href="" role="button">Book</a>
+                                    </p>
+                                    <p>{{ room.description }}</p>
+
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+
+                    {#                    {% for building in buildings %}#}
+                    {#                        <div class="container">#}
+                    {#                            <h3><span class="toggler toggle-enabled">{{ building.title }}</span></h3>#}
+                    {#                            {% for floor in building.floor_count %}#}
+                    {#                                <div class="wrapper togglethis">#}
+                    {#                                    <div class="container">#}
+                    {#                                        <h3><span class="toggler toggle-enabled">{{ floor }}</span></h3>#}
+                    {#                                        {% for room in room_list %}#}
+                    {#                                            {% if building.id == room.building_id and floor == room.floor %}#}
+                    {#                                                <div class="container">#}
+                    {#                                                    <h3><span#}
+                    {#                                                            class="toggler toggle-enabled">{{ room.room_number }}</span>#}
+                    {#                                                    </h3>#}
+                    {#                                                    {% for i in intervals %}#}
+                    {#                                                        {% if room.id == i.room_id %}#}
+                    {#                                                            {% if user.is_admin %}#}
+                    {#                                                                {% if i.status == 'Booked' %}#}
+                    {#                                                                    <div class="wrapper togglethis">#}
+                    {#                                                                        <p>{{ i }} - is booked!#}
+                    {#                                                                            <a class="btn btn-primary" href=""#}
+                    {#                                                                               role="button">Edit</a>#}
+                    {#                                                                        </p>#}
+                    {#                                                                    </div>#}
+                    {#                                                                {% else %}#}
+                    {#                                                                    <div class="wrapper togglethis">#}
+                    {#                                                                        <p>{{ i }}#}
+                    {#                                                                            <a class="btn btn-primary" href=""#}
+                    {#                                                                               role="button">Edit</a>#}
+                    {#                                                                            <a href="{% url 'bookings:room-book' i.id %} "#}
+                    {#                                                                               class="btn btn-primary" role="button">Book</a>#}
+                    {#                                                                        </p>#}
+                    {#                                                                    </div>#}
+                    {#                                                                {% endif %}#}
+                    {#                                                            {% else %}#}
+                    {#                                                                {% if i.status == 'Booked' %}#}
+                    {#                                                                    <div class="wrapper togglethis">#}
+                    {#                                                                        <p>{{ i }} - is booked!#}
+                    {#                                                                            <a href="" class="btn btn-primary"#}
+                    {#                                                                               role="button">Book anyway</a>#}
+                    {#                                                                        </p>#}
+                    {#                                                                    </div>#}
+                    {#                                                                {% else %}#}
+                    {#                                                                    <div class="wrapper togglethis">#}
+                    {#                                                                        <p>{{ i }}#}
+                    {#                                                                            <a href="{% url 'bookings:room-book' i.id %} "#}
+                    {#                                                                               class="btn btn-primary" role="button">Book</a>#}
+                    {#                                                                        </p>#}
+                    {#                                                                    </div>#}
+                    {#                                                                {% endif %}#}
+                    {#                                                            {% endif %}#}
+                    {#                                                        {% endif %}#}
+                    {#                                                    {% endfor %}#}
+                    {#                                                </div>#}
+                    {#                                            {% endif %}#}
+                    {#                                        {% endfor %}#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                            {% endfor %}#}
+                    {#                        </div>#}
+                    {#                    {% endfor %}#}
+
+
+
+                </div>
+    </section>
+
+
+
+
+{% endblock %}

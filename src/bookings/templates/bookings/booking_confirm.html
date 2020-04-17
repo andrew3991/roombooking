@@ -1,0 +1,20 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+    <h1>Confirm form</h1>
+{#    <form  method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form }}#}
+{#        <input type="submit" value="Submit">#}
+{#    </form>#}
+
+    <form  method='POST'>{% csrf_token %}
+  <div class="form-group">
+    <label for="deleteBooking">Do you want book room for "{{ date }}"?</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Yes</button>
+  <a class="btn btn-primary" role="button"  href='/buildings/{{ date }}'>Cancel</a>
+</form>
+
+{% endblock %}
